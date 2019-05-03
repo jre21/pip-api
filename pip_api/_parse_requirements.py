@@ -87,7 +87,7 @@ def _parse_editable(editable_req):
         url_no_extras = _path_to_url(url_no_extras)
 
     if url_no_extras.lower().startswith('file:'):
-        return
+        return None, url_no_extras
 
     if '+' not in url:
         raise PipError(
@@ -162,7 +162,8 @@ def parse_requirements(filename, options=None):
                     to_parse.add(known.requirements)
             elif known.editable:
                 name, url = _parse_editable(known.editable)
-                req = packaging.requirements.Requirement("%s @ %s" % (name, url))
+                if name:
+                    req = packaging.requirements.Requirement("%s @ %s" % (name, url))
             else:
                 pass  # This is an invalid requirement
 
